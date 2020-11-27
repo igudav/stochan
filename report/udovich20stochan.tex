@@ -1,0 +1,185 @@
+\documentclass[12pt, a4paper]{article} % свойства докуменат
+\usepackage[utf8]{inputenc} % хотим нормальную кодировку
+\usepackage[T2A]{fontenc} % тип шрифта, по-моему
+\usepackage[russian]{babel} % русские буквы и обозначения
+\usepackage{graphicx, xcolor} % графика
+\usepackage{subfiles} % царская разбивка на много файлов
+\usepackage{amsmath} % различные нужные символы, типа \geqslant
+\usepackage{amssymb} % еще немного символов
+\usepackage{bbm}
+\usepackage{import} % для включения рисунков
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{titlesec} % для настройки заголовков и секций вообще
+\usepackage{caption} % для подписей к рисункам на 2 строки
+\usepackage[outdir=./figures/]{epstopdf}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{mathrsfs}
+
+% комманда для царского добавления в документ векторной графики
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{figures/}{#1.pdf_tex}
+}
+\pdfsuppresswarningpagegroup=1
+
+\newcommand\eqdef{\stackrel{\text{\tiny def}}{=}}
+
+\newtheorem{Th}{Теорема}
+
+% русские знаки нестрогих неравенств
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+\renewcommand{\emptyset}{\varnothing}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\inner}[2]{\bigl< #1, #2 \bigr>}
+\newcommand\Set[2]{\left\{ #1 \colon #2 \right\}}
+\newcommand\Sum[3]{\sum\limits_{#1 = #2}^{#3}}
+\newcommand\Alsur{\mathrel{\stackrel{\mathrm{\text{п.н.}}}=}} % almost shure
+\newcommand\Eqtext[1]{\mathrel{\stackrel{\mathrm{\text{#1}}}=}} 
+
+\def\Pro{\mathbb{P}} % вероятность
+\def\Ev{\mathcal{F}} % алгебра событий
+\def\Bor{\mathscr{B}} % борелевская сигма-алгебра
+\def\Real{\mathbb{R}} % вещественная прямая
+\def\Int{\mathbb{Z}} % целые числа
+\def\Nat{\mathbb{N}} % натуральные числа
+\def\Compl{\mathbb{C}} % комплексные числа
+\def\Expec{\mathbb{E}} % матожидание 
+\def\Ind{\mathbbm{1}} % индикатор
+\def\Smpl{\mathbb{X}} % выборка
+\def\Med{{\rm med \,}} % медиана
+\def\Cov{{\rm cov \,}} % ковыряция
+\def\Mod{{\rm mod \,}} % мода
+\def\Pois{{\rm Pois \,}} 
+\def\Norm{\mathcal{N}} % нормальное распределение
+
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}%
+            {\hbox{\mathsurround=0pt #1}}{}}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\Large\bfseries}{\thesubsection.}{1em}{}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\var}{var}
+
+\newtheorem{St}{Утверждение}
+\newtheorem{Def}{Определение}
+\newenvironment{Proof}{\par\textbf{Доказательство. }}
+	{\hfill$\blacksquare$\vspace{0.1cm}} 
+
+% \counterwithin{section}{part}
+
+\begin{document}
+
+\subfile{titul.tex}
+
+\tableofcontents
+
+\newpage
+
+\section*{Задание 1}
+
+Пусть дана случайная величина $X \sim U[0, 1]$, рассмотрим случайную величину $Y = \Ind(X < p)$. 
+Тогда $Y$ принимает значение $1$ с вероятностью $p$.
+Это следует из свойства: $\Expec(\Ind_A) = \Pro(A)$.
+
+\begin{Def}
+    Биномиальным распределением случайной величины с параметрами $n, p$ 
+    будем называть случайную величину, принмающую значения, равные числу успехов в  $n$ испытаниях Бернулли с вероятностью успеха $p$.
+\end{Def}
+Из определения следует способ генерирования биномиальной случайной величины:
+\[
+    X = \sum\limits_{i=1}^{n} Y_i, 
+\] 
+где случайные величины $Y_i$ имеют распределение Бернулли с вероятностью успеха  $p$.
+
+\begin{Def}
+    Геометрическим распределением с параметром $p$ (и $q = 1 - p$) будем 
+    называть распределение числа неудач до 1-го успеха в схеме Бернулли.
+\end{Def}
+Функция вероятность геометрического распределения имеет вид: 
+$\Pro (X \hm= n) = q^np,\ n \in \Nat_0$.
+
+Пусть случайная величина $Y \sim exp(\lambda)$.
+Тогда 
+$$
+\Pro(n \le Y < n + 1) = e^{-\lambda n} \left(1 - e^{-\lambda}\right),
+$$
+\[
+   X = \lfloor Y \rfloor \sim geom(1 - e^{-\lambda}).
+\] 
+Тогда чтобы получить геометрическое распределение с параметром $p$ надо 
+взять целую часть от експоненциально распределенной случайной величины с параметром  $\lambda = -\ln(1 - p)$
+Экспоненциальное распределение получим обращением функции распределения:
+если $Z \sim U[0, 1]$, тогда $Y = -\frac{1}{\lambda} \ln(1 - Z) \sim exp(\lambda)$.
+Окончательно получаем $X = \left\lfloor \frac{\ln(1 - Z)}{\ln(1 - p)} \right\rfloor\sim geom(p)$.
+
+\begin{St}
+    Для $X \sim geom(p)$ верно свойство отсутствия памяти:
+    $\Pro (X \ge m + n \mid X \ge m) \hm= \Pro(X \ge n)$.
+\end{St}
+\begin{Proof}
+    \begin{multline*}
+        \Pro (X \ge m + n \mid X \ge m) =
+        \frac{\Pro(X \ge m + n)}{\Pro(X \ge m)} =\\
+        \frac{q^{m + n}p / (1 - q)}{q^{m}p / (1 - q)} = q^{n} =
+        \sum\limits_{i=n}^{\infty} q^{i}p = 
+        \Pro(X \ge n).
+    \end{multline*} 
+\end{Proof} 
+
+Рассмотрим игру <<орлянку>> со случайной величиной $X$:
+\[
+    X_i =
+    \begin{cases}
+        1\ \text{c вероятностью}\ p = 0{,}5, \\
+        -1\ \text{c вероятностью}\ 1 - p = 0{,}5.
+    \end{cases} 
+\] 
+Пусть  $S_n = \sum\limits_{i=1}^{n} X_i$ и $Y = S_i /\!\sqrt{n}$.
+Так как $\Expec S_n = 0$ и  $var[S_n] = n$, то из центральной предельной теоремы следует,
+что $Y = S_i /\!\sqrt{n} \xrightarrow[n \rightarrow \infty]{d}  \Norm(0, 1)$.
+
+\section*{Задание 2}
+
+\begin{Def}
+    Канторовой лестницей нахывается функция $f$, которая строится следующим образом:
+    \begin{enumerate}
+        \item $f(0) = 0$,  $f(1) = 1$.
+        \item Отрезок  $[0, 1]$ разбивается на 3 равных части, затем на 
+            средней части функция  $f$ полагается равной полусумме значений на концах.
+        \item для первого и третьего отрезка процедура повторяется рекурсивно.
+    \end{enumerate} 
+\end{Def} 
+
+По определению канторова лестница обладает свойством фрактальности или самоподобия:
+$f(x) = 2f(x / 3)$.
+Так как  $f$ монотонна и лежит в отрезке  $[0, 1]$, то существует 
+случайная величина $X$ (сингулярная), функция распределения которой является канторовой лестницей.
+
+Используя свойство фрактальности данной случайной величины, найдем ее математическое ожидание и дисперсию:
+\[
+    X \Eqtext{d} 1 - X \implies \Expec X = 0.
+\] 
+\begin{equation*}
+    \Expec X^2 = \int\limits_{0}^{1} x^2 dF(x) = 
+    \int\limits_{0}^{\frac{1}{3}} x^2 dF(x) +
+    \int\limits_{\frac{2}{3}}^{1}  x^2 dF(x).    
+\end{equation*}
+Отсюда используя замену $y = 3x$ и свойство $F(x / 3) = F(x) / 2$ получаем 
+ \[
+     \var\left[ X \right] = \Expec X^2 = \frac{3}{8}.
+\] 
+
+\newpage
+
+\bibliographystyle{utf8gost705u}
+\bibliography{biblio}
+ \end{document} 
